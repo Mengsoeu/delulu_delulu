@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SkillsService } from './skills.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
+import { ApiBadRequestResponse, ApiBody, ApiNotFoundResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('skills')
 export class SkillsController {
@@ -13,6 +14,10 @@ export class SkillsController {
   }
 
   @Get()
+  @ApiNotFoundResponse({ description: 'No skills found' })
+  @ApiBadRequestResponse({ description: 'Invalid query parameters' })
+  @ApiResponse({ status: 200, description: 'List of skills retrieved successfully' })
+  @ApiQuery({ name: 'page', required: false, description: 'Page number for pagination', example: 1 })
   findAll() {
     const data = this.skillsService.findAll();
     return {
