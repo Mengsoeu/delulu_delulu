@@ -1,14 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SkillsService {
+  constructor(private prismaService: PrismaService) {}
   create(createSkillDto: CreateSkillDto) {
     return 'This action adds a new skill';
   }
 
-  findAll() {
+  async findAll() {
+    const data = await this.prismaService.skill.findMany();
     return `This action returns all skills`;
   }
 
