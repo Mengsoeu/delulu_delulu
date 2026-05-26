@@ -9,8 +9,14 @@ export class SkillsController {
   constructor(private readonly skillsService: SkillsService) {}
 
   @Post()
-  create(@Body() createSkillDto: CreateSkillDto) {
-    return this.skillsService.create(createSkillDto);
+  @ApiResponse({ status: 200, description: 'Created skill successfully' })
+  async create(@Body() createSkillDto: CreateSkillDto) {
+    const data = await this.skillsService.create(createSkillDto);
+
+    return {
+      code: "Post Skill success",
+      data
+    }
   }
 
   @Get()
