@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SkillsService } from './skills.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
-import { ApiBadRequestResponse, ApiBody, ApiNotFoundResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiNotFoundResponse, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('skills')
 export class SkillsController {
@@ -49,11 +49,22 @@ export class SkillsController {
   }
 
   @Patch(':id')
+  @ApiParam({
+    name: 'id',
+    description: 'skill Id' 
+  })
+  @ApiResponse({ status: 200, description: 'Update Skill successfully'})
   update(@Param('id') id: string, @Body() updateSkillDto: UpdateSkillDto) {
     return this.skillsService.update(+id, updateSkillDto);
   }
 
   @Delete(':id')
+  @ApiParam({
+    name: 'id',
+    description: 'skill Id' 
+  })
+  @ApiResponse({ status: 200, description: 'Delete Skill successfully'})
+  
   remove(@Param('id') id: string) {
     return this.skillsService.remove(+id);
   }

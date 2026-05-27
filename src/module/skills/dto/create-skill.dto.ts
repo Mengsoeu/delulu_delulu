@@ -13,6 +13,4 @@ export class CreateSkillDto {
     @IsString()
     @MaxLength(250)
     description: string | null;
-
-    
 }
