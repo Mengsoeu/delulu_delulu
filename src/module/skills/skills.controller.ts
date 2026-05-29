@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { SkillsService } from './skills.service';
-import { CreateSkillDto } from './dto/create-skill.dto';
-import { UpdateSkillDto } from './dto/update-skill.dto';
 import { ApiBadRequestResponse, ApiBody, ApiNotFoundResponse, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { QuerySkillDto, CreateSkillDto, UpdateSkillDto } from './dto/index.dto';
 
 @Controller('skills')
 export class SkillsController {
@@ -20,21 +19,26 @@ export class SkillsController {
   }
 
   @Get()
-  @ApiNotFoundResponse({ description: 'No skills found' })
-  @ApiBadRequestResponse({ description: 'Invalid query parameters' })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    default: 1,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    default: 5,
+  })
   @ApiResponse({ status: 200, description: 'List of skills retrieved successfully' })
-  @ApiQuery({ name: 'page', required: false, description: 'Page number for pagination', example: 1 })
-  findAll() {
-    const data = this.skillsService.findAll();
+  async findAll(@Query() queryDto: QuerySkillDto) {
+    const data = await this.skillsService.findAll(queryDto);
     return {
       code: "Get Skill success",
-      data: [],
-      isPaginate: true,
-      meta: {
-        total: 1,
-        page: 1,
-        limit: 10,
-      },
+      data: data,
     }
   }
 
@@ -64,7 +68,6 @@ export class SkillsController {
     description: 'skill Id' 
   })
   @ApiResponse({ status: 200, description: 'Delete Skill successfully'})
-  
   remove(@Param('id') id: string) {
     return this.skillsService.remove(+id);
   }

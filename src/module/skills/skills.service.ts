@@ -3,6 +3,8 @@ import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { emailInUse } from 'src/common/filter/exception/emai-inUse.exception';
+import { promises } from 'node:dns';
+import { QuerySkillDto } from './dto/get-all-skill.dto';
 
 @Injectable()
 export class SkillsService {
@@ -16,9 +18,64 @@ export class SkillsService {
     return data;
   }
 
-  async findAll() {
-    const data = await this.prismaService.skill.findMany();
-    return `This action returns all skills`;
+  async findAll(queryDto: QuerySkillDto) {
+    // query params
+    const search = queryDto.search;
+    const page = Number(queryDto.page);
+    const limit = Number(queryDto.limit);
+
+    // pagination
+    const skip = (page - 1) * limit;
+
+    // total
+    const total = await this.prismaService.skill.count({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: search,
+            },
+          },
+          {
+            description: {
+              contains: search,
+            },
+          },
+        ],
+      },
+    });
+
+    const data = await this.prismaService.skill.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: search,
+            },
+          },
+          {
+            description: {
+              contains: search,
+            },
+          },
+        ],
+      },
+      skip,
+      take: limit,
+      orderBy: {
+        id: 'desc',
+      },
+    });
+
+    return {
+      rows: data,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    }
   }
 
   findOne(id: number) {
