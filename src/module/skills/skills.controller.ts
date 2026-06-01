@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, ParseUUIDPipe } from '@nestjs/common';
 import { SkillsService } from './skills.service';
 import { ApiBadRequestResponse, ApiBody, ApiNotFoundResponse, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { QuerySkillDto, CreateSkillDto, UpdateSkillDto } from './dto/index.dto';
+import { TrimPipe } from './../../common/pipe/trim.pipe';
 
 @Controller('skills')
 export class SkillsController {
@@ -40,13 +41,13 @@ export class SkillsController {
       code: "Get Skill success",
       data: data,
     }
-  }
+  }  
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const data = this.skillsService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const data = await this.skillsService.findOne(+id);
     return {
-      code: "Get SSkill success",
+      code: "Get Skill success",
       data: data,
       isPaginate: false
     };
@@ -65,7 +66,7 @@ export class SkillsController {
   @Delete(':id')
   @ApiParam({
     name: 'id',
-    description: 'skill Id' 
+    description: 'skill Id'
   })
   @ApiResponse({ status: 200, description: 'Delete Skill successfully'})
   remove(@Param('id') id: string) {
