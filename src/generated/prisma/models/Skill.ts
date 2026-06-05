@@ -40,6 +40,7 @@ export type SkillMinAggregateOutputType = {
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deleteAt: Date | null
 }
 
 export type SkillMaxAggregateOutputType = {
@@ -48,6 +49,7 @@ export type SkillMaxAggregateOutputType = {
   description: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  deleteAt: Date | null
 }
 
 export type SkillCountAggregateOutputType = {
@@ -56,6 +58,7 @@ export type SkillCountAggregateOutputType = {
   description: number
   createdAt: number
   updatedAt: number
+  deleteAt: number
   _all: number
 }
 
@@ -74,6 +77,7 @@ export type SkillMinAggregateInputType = {
   description?: true
   createdAt?: true
   updatedAt?: true
+  deleteAt?: true
 }
 
 export type SkillMaxAggregateInputType = {
@@ -82,6 +86,7 @@ export type SkillMaxAggregateInputType = {
   description?: true
   createdAt?: true
   updatedAt?: true
+  deleteAt?: true
 }
 
 export type SkillCountAggregateInputType = {
@@ -90,6 +95,7 @@ export type SkillCountAggregateInputType = {
   description?: true
   createdAt?: true
   updatedAt?: true
+  deleteAt?: true
   _all?: true
 }
 
@@ -185,6 +191,7 @@ export type SkillGroupByOutputType = {
   description: string | null
   createdAt: Date
   updatedAt: Date
+  deleteAt: Date | null
   _count: SkillCountAggregateOutputType | null
   _avg: SkillAvgAggregateOutputType | null
   _sum: SkillSumAggregateOutputType | null
@@ -216,6 +223,7 @@ export type SkillWhereInput = {
   description?: Prisma.StringNullableFilter<"Skill"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Skill"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Skill"> | Date | string
+  deleteAt?: Prisma.DateTimeNullableFilter<"Skill"> | Date | string | null
 }
 
 export type SkillOrderByWithRelationInput = {
@@ -224,6 +232,7 @@ export type SkillOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deleteAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _relevance?: Prisma.SkillOrderByRelevanceInput
 }
 
@@ -236,6 +245,7 @@ export type SkillWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Skill"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Skill"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Skill"> | Date | string
+  deleteAt?: Prisma.DateTimeNullableFilter<"Skill"> | Date | string | null
 }, "id">
 
 export type SkillOrderByWithAggregationInput = {
@@ -244,6 +254,7 @@ export type SkillOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deleteAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SkillCountOrderByAggregateInput
   _avg?: Prisma.SkillAvgOrderByAggregateInput
   _max?: Prisma.SkillMaxOrderByAggregateInput
@@ -260,6 +271,7 @@ export type SkillScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Skill"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Skill"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Skill"> | Date | string
+  deleteAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Skill"> | Date | string | null
 }
 
 export type SkillCreateInput = {
@@ -267,6 +279,7 @@ export type SkillCreateInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deleteAt?: Date | string | null
 }
 
 export type SkillUncheckedCreateInput = {
@@ -275,6 +288,7 @@ export type SkillUncheckedCreateInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deleteAt?: Date | string | null
 }
 
 export type SkillUpdateInput = {
@@ -282,6 +296,7 @@ export type SkillUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SkillUncheckedUpdateInput = {
@@ -290,6 +305,7 @@ export type SkillUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SkillCreateManyInput = {
@@ -298,6 +314,7 @@ export type SkillCreateManyInput = {
   description?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deleteAt?: Date | string | null
 }
 
 export type SkillUpdateManyMutationInput = {
@@ -305,6 +322,7 @@ export type SkillUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SkillUncheckedUpdateManyInput = {
@@ -313,6 +331,7 @@ export type SkillUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleteAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SkillOrderByRelevanceInput = {
@@ -327,6 +346,7 @@ export type SkillCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deleteAt?: Prisma.SortOrder
 }
 
 export type SkillAvgOrderByAggregateInput = {
@@ -339,6 +359,7 @@ export type SkillMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deleteAt?: Prisma.SortOrder
 }
 
 export type SkillMinOrderByAggregateInput = {
@@ -347,6 +368,7 @@ export type SkillMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  deleteAt?: Prisma.SortOrder
 }
 
 export type SkillSumOrderByAggregateInput = {
@@ -365,6 +387,10 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -381,6 +407,7 @@ export type SkillSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deleteAt?: boolean
 }, ExtArgs["result"]["skill"]>
 
 
@@ -391,9 +418,10 @@ export type SkillSelectScalar = {
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  deleteAt?: boolean
 }
 
-export type SkillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["skill"]>
+export type SkillOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt" | "deleteAt", ExtArgs["result"]["skill"]>
 
 export type $SkillPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Skill"
@@ -404,6 +432,7 @@ export type $SkillPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     description: string | null
     createdAt: Date
     updatedAt: Date
+    deleteAt: Date | null
   }, ExtArgs["result"]["skill"]>
   composites: {}
 }
@@ -778,6 +807,7 @@ export interface SkillFieldRefs {
   readonly description: Prisma.FieldRef<"Skill", 'String'>
   readonly createdAt: Prisma.FieldRef<"Skill", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Skill", 'DateTime'>
+  readonly deleteAt: Prisma.FieldRef<"Skill", 'DateTime'>
 }
     
 

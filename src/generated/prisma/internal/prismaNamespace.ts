@@ -514,7 +514,8 @@ export const SkillScalarFieldEnum = {
   name: 'name',
   description: 'description',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  deleteAt: 'deleteAt'
 } as const
 
 export type SkillScalarFieldEnum = (typeof SkillScalarFieldEnum)[keyof typeof SkillScalarFieldEnum]

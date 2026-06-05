@@ -42,6 +42,9 @@ export class SkillsService {
             },
           },
         ],
+        NOT: {
+          deleteAt: null
+        }
       },
     });
 
@@ -59,6 +62,7 @@ export class SkillsService {
             },
           },
         ],
+        deleteAt: null
       },
       skip,
       take: limit,
@@ -80,7 +84,7 @@ export class SkillsService {
 
   async findOne(id: number) {
     const data = await this.prismaService.skill.findFirst({
-      where: { id },
+      where: { id }
     });
     return data;
   }
@@ -102,7 +106,7 @@ export class SkillsService {
     return data;
   }
 
-  async remove(id: number) { 
+  async remove(id: number) {
     const data = await this.isExist(id);
     if (!data) {
       throw new emailInUse({
@@ -110,8 +114,12 @@ export class SkillsService {
         message: "Id is invalid or not found",
       });
     }
-    return await this.prismaService.skill.delete({
-      where: { id }
+    // await this.prismaService.skill.delete
+    return await this.prismaService.skill.update({
+      where: { id },
+      data: {
+        deleteAt: new Date().toISOString(),
+      }
     })
   }
 

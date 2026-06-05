@@ -15,7 +15,7 @@ export class SkillsController {
 
     return {
       code: "Post Skill success",
-      data
+      data,
     }
   }
 
@@ -56,7 +56,7 @@ export class SkillsController {
   @Patch(':id')
   @ApiParam({
     name: 'id',
-    description: 'skill Id' 
+    description: 'skill Id'
   })
   @ApiResponse({ status: 200, description: 'Update Skill successfully'})
   update(@Param('id') id: string, @Body() updateSkillDto: UpdateSkillDto) {
