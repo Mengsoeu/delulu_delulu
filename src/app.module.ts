@@ -7,6 +7,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { SkillsController } from './module/skills/skills.controller';
+import { AuthModule } from './module/auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { SkillsController } from './module/skills/skills.controller';
     }),
     SkillsModule,
     PrismaModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
