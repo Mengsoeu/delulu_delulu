@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request, UseGuards, Headers, Put } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto } from './dto/signup.dto';
-import { ApiBody, ApiProperty, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiHeader, ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { LocalAuthGuard } from 'src/guard/local-auth.guard';
+import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -32,4 +33,35 @@ export class AuthController {
     }
   }
 
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('/me')
+  async getMe(@Request() req) {
+    return {
+      code: 'get_me.success',
+      data: req.user
+    }
+  }
+
+  @Post('/refresh')
+  async refresh(@Headers('x-refresh-token') refreshToken: string) {
+    const data = await this.authService.refreshToken(refreshToken);
+    return {
+      code: 'renew.access_token',
+      data
+    }
+  }
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Put('/logout')
+  async logout(@Request() req) {
+    console.log(req.user)
+    await this.authService.logout(req.user.userId);
+    return {
+      code: 'logout.success',
+    }
+  }
+
+
+ 
 }

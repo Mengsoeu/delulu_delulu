@@ -51,12 +51,79 @@ export class AuthService {
 
 
     async login(user: any) {
-        // create jwt token
-        return {
-            access_token: this.jwtService.sign({
-                sub: user.id,
-                username: user.username
-            })
+        const payload = {
+            sub: user.id,
+            username: user.username
         }
+
+        const accessToken = await this.jwtService.signAsync(payload, {
+            secret: 'nest',
+            expiresIn: '15m',
+        })
+
+        const refreshToken = await this.jwtService.signAsync(payload, {
+            secret: 'nest2',
+            expiresIn: '7d',
+        })
+
+        const hashRefreshToken = await bcrypt.hash(refreshToken, 10);
+
+        await this.prismaService.user.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                refreshToken: hashRefreshToken
+            }
+        })
+
+        return {
+            accessToken,
+            refreshToken,
+        }
+    }
+
+    async refreshToken(token: string) {
+        const payload = await this.jwtService.verifyAsync(token, {
+            secret: 'nest2'
+        })
+
+        const user = await this.prismaService.user.findUnique({
+            where: { id: payload.sub }
+        })
+        if (!user || !user.refreshToken) {
+            throw new UnauthorizedException();
+        }
+
+        const valid = await bcrypt.compare(
+            token,
+            user.refreshToken
+        )
+        if (!valid) {
+            throw new UnauthorizedException();
+        } 
+
+        const accessToken = await this.jwtService.signAsync(
+            { 
+                sub: user.id, 
+                username: user.username
+            }, {
+                secret: 'nest',
+                expiresIn: '15m',
+            },
+        );
+
+        return {
+            accessToken
+        }
+    }
+
+    async logout(userId: number) {
+        await this.prismaService.user.update({
+            where: { id: userId },
+            data: { 
+                refreshToken: null
+            }
+        })
     }
 }
