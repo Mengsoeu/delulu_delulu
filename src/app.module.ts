@@ -6,7 +6,6 @@ import { SkillsModule } from './module/skills/skills.module';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
-import { SkillsController } from './module/skills/skills.controller';
 import { AuthModule } from './module/auth/auth.module';
 
 @Module({

@@ -1,67 +1,57 @@
-import { Body, Controller, Get, Post, Request, UseGuards, Headers, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Req, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/signup.dto';
-import { ApiBearerAuth, ApiBody, ApiHeader, ApiProperty, ApiResponse } from '@nestjs/swagger';
-import { LocalAuthGuard } from 'src/guard/local-auth.guard';
-import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiResponse, ApiSecurity } from '@nestjs/swagger';
+import { signUpDto } from './dto/sign-up.dto';
+import { loginDto } from './dto/login-dto';
+import { AuthGuard } from 'src/guard/auth/auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/singup')
-  @ApiResponse({ status: 201, description: 'Signup user successfully' })
-  async signup(@Body() signUpDto: SignUpDto) {
-    const data = await this.authService.signup(signUpDto);
+  @Post('/signup')
+  @ApiResponse({ status: 200, description: 'Sign up successfully' })
+  async signup(@Body() signUpDto: signUpDto) {
+    await this.authService.signUp(signUpDto);
     return {
-      code: 'Signup user success',
-      data
-    }
+      code: 'signup.success',
+    };
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('/login')
-  @ApiBody({
-    type: SignUpDto
-  })
-  @ApiResponse({ status: 201, description: 'Login user successfully' })
-  async login(@Request() req) {
-    const data = await this.authService.login(req.user);
+  @ApiResponse({ status: 200, description: 'Login successfully' })
+  async login(@Body() loginDto: loginDto) {
+    const data = await this.authService.login(loginDto);
     return {
-      code: 'Login user success',
+      code: 'login.success',
       data
     }
   }
 
+  @Get('/profile')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Get('/me')
-  async getMe(@Request() req) {
+  @ApiSecurity('api-key')
+  @UseGuards(AuthGuard)
+  @ApiResponse({ status: 200, description: 'Get profile successfully' })
+  async getProfile(@Req() req) {
+    const data = req.user;
     return {
-      code: 'get_me.success',
-      data: req.user
-    }
+      code: 'get_profile.success',
+      data: {
+        id: data.user.id,
+        username: data.user.username
+      }
+    };
   }
 
-  @Post('/refresh')
-  async refresh(@Headers('x-refresh-token') refreshToken: string) {
-    const data = await this.authService.refreshToken(refreshToken);
-    return {
-      code: 'renew.access_token',
-      data
-    }
-  }
+  @Delete('/logout')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Put('/logout')
-  async logout(@Request() req) {
-    console.log(req.user)
-    await this.authService.logout(req.user.userId);
+  @UseGuards(AuthGuard)
+  @ApiResponse({ status: 200, description: 'Logou successfully' })
+  async logout(@Req() req) {
+    await this.authService.logout(req.user.tokenId);
     return {
       code: 'logout.success',
     }
   }
-
-
- 
 }
