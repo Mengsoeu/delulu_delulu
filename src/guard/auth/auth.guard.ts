@@ -1,15 +1,31 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { PUBLIC_KEY } from 'src/common/decorator/public.decorator';
+import { PERMISSION, ROLE } from 'src/common/enum/role.enum';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private reflector: Reflector,
+  ) {}
 
-  async canActivate(
-    context: ExecutionContext,
-  ): Promise<boolean>{
-    const request = context.switchToHttp().getRequest()
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
+
+    const request = context.switchToHttp().getRequest();
     const authHeader = request.header('authorization');
 
     // check missing header
@@ -26,7 +42,7 @@ export class AuthGuard implements CanActivate {
     // check if token is valid
     const token = await this.prismaService.session.findFirst({
       where: {
-        token: extractHeader
+        token: extractHeader,
       },
       include: { user: true },
     });
@@ -37,8 +53,10 @@ export class AuthGuard implements CanActivate {
     // Attach user to request
     request.user = {
       user: token.user,
-      tokenId: token.id
-    }
+      tokenId: token.id,
+      role: ROLE.SUPER_ADMIN,
+      // permission: [PERMISSION.ADMIN_READ, PERMISSION.ADMIN_CREATE],
+    };
 
     return true;
   }

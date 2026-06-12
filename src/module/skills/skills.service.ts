@@ -42,9 +42,7 @@ export class SkillsService {
             },
           },
         ],
-        NOT: {
-          deleteAt: null
-        }
+        deleteAt: null
       },
     });
 
@@ -70,7 +68,6 @@ export class SkillsService {
         id: 'desc',
       },
     });
-
     return {
       rows: data,
       pagination: {

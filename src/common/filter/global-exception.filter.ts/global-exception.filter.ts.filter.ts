@@ -28,7 +28,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         : (exceptionResponse as any).message
     }
 
-    // console.error(exception);
+    console.error(exception);
 
     response.status(status).json({
       success: false,
